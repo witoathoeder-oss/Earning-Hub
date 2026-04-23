@@ -3,63 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PTC Rewards Portal</title>
-    
+    <title>Earning Hub - Mini App</title>
     <script src='//libtl.com/sdk.js' data-zone='10915367' data-sdk='show_10915367'></script>
     
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0d1117; color: white; margin: 0; text-align: center; }
-        .ad-top { width: 100%; min-height: 90px; background: #161b22; padding: 10px 0; border-bottom: 1px solid #333; }
-        .container { padding: 20px; max-width: 800px; margin: auto; }
-        .main-card { background: #161b22; border-radius: 15px; padding: 30px; border: 1px solid #30363d; margin-bottom: 20px; }
-        .reward-btn { background: #238636; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 18px; width: 100%; transition: 0.3s; }
-        .reward-btn:hover { background: #2ea043; transform: scale(1.02); }
-        .native-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .native-box { background: #21262d; padding: 15px; border-radius: 10px; border: 1px dashed #444; min-height: 150px; }
-        .ad-bottom { margin-top: 30px; padding: 15px; background: #161b22; border-radius: 10px; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e; /* Dark background like your image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 350px;
+            background: #000;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .title {
+            color: #26e6b5;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            background: linear-gradient(90deg, #ff8a71, #f9d423);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            font-size: 14px;
+            margin: 10px 0;
+            color: #ccc;
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            background: #0a3d34;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            color: #26e6b5;
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid #145a4a;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Gradient Colors from your image */
+        .btn-pink { background: linear-gradient(90deg, #ff7e5f, #feb47b); }
+        .btn-magenta { background: linear-gradient(90deg, #e94057, #f27121); }
+        .btn-orange { background: linear-gradient(90deg, #ff5f6d, #ffc371); }
+        .btn-yellow { background: linear-gradient(90deg, #f9d423, #ff4e50); color: #000; }
+
+        .btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-    <div class="ad-top">
-        <p style="font-size: 10px; color: #555; margin: 0;">ADVERTISEMENT</p>
-        </div>
+<div class="container">
+    <div class="title">Earning Hub</div>
+    <div class="sub-title">Earning Hub</div>
 
-    <div class="container">
-        <div class="main-card">
-            <h1>Ready to Claim Rewards?</h1>
-            <p style="color: #8b949e;">Click below to watch ad and earn points instantly.</p>
-            
-            <button class="reward-btn" onclick="showRewardAd()">WATCH AD & EARN</button>
-        </div>
-
-        <div class="native-grid">
-            <div class="native-box">
-                <p style="font-size: 10px; color: #555;">SPONSORED</p>
-                </div>
-            <div class="native-box">
-                <p style="font-size: 10px; color: #555;">SPONSORED</p>
-                </div>
-        </div>
-
-        <div class="ad-bottom">
-            </div>
+    <div class="stats">
+        <div>Watched Ads: <span id="adsCount">0</span></div>
+        <div>Earned Points: <span id="pointsCount">0.00</span></div>
     </div>
 
-    <script>
-        function showRewardAd() {
-            // SDK মেমরিতে আছে কি না চেক করবে
-            if (typeof show_10915367 === 'function') {
-                show_10915367().then(() => {
-                    alert("Congratulations! Points Added.");
-                }).catch(err => {
-                    alert("Ad failed to load. Please use a VPN or Refresh.");
-                });
-            } else {
-                // এটি তখনই আসবে যদি আপনি ফাইলটি লোকাল (file://) মোডে ওপেন করেন
-                alert("Error: Please host this file on GitHub/Hosting to enable ads.");
-            }
+    <div class="progress-circle" id="progress">0%</div>
+
+    <button class="btn btn-pink" onclick="showMonetagAd()">Watch Ad</button>
+    <button class="btn btn-magenta" onclick="startAutoAds()">Auto Ads</button>
+    <button class="btn btn-magenta" onclick="stopAutoAds()">Stop Auto</button>
+    <button class="btn btn-orange" onclick="withdraw()">Withdraw</button>
+    <button class="btn btn-yellow" onclick="openTelegram()">Telegram Support Group</button>
+</div>
+
+<script>
+    let watchedAds = 0;
+    let earnedPoints = 0.00;
+    let autoAdInterval;
+
+    // ১. সাধারণ অ্যাড দেখানোর ফাংশন
+    function showMonetagAd() {
+        if (typeof show_10915367 === 'function') {
+            show_10915367().then(() => {
+                // অ্যাড দেখা শেষ হলে যা হবে
+                updateStats();
+            }).catch((e) => {
+                alert("অ্যাড লোড হতে সমস্যা হচ্ছে। আবার চেষ্টা করুন।");
+            });
+        } else {
+            alert("অ্যাড এখনো লোড হয়নি। দয়া করে কিছুক্ষণ অপেক্ষা করুন।");
         }
-    </script>
+    }
+
+    // ২. অটো অ্যাডস ফাংশন (5 সেকেন্ড পর পর)
+    function startAutoAds() {
+        alert("Auto Ads Started! Every 30 seconds an ad will show.");
+        autoAdInterval = setInterval(() => {
+            showMonetagAd();
+        }, 5000); 
+    }
+
+    function stopAutoAds() {
+        clearInterval(autoAdInterval);
+        alert("Auto Ads Stopped.");
+    }
+
+    // ৩. স্ট্যাটাস আপডেট (পয়েন্ট সিস্টেম)
+    function updateStats() {
+        watchedAds++;
+        earnedPoints += 0.50; // প্রতি অ্যাডের জন্য ০.৫০ পয়েন্ট
+        document.getElementById('adsCount').innerText = watchedAds;
+        document.getElementById('pointsCount').innerText = earnedPoints.toFixed(2);
+        
+        // প্রগ্রেস আপডেট (উদাহরণস্বরূপ ১০০ অ্যাডে ১০০%)
+        let progress = Math.min(watchedAds, 100);
+        document.getElementById('progress').innerText = progress + "%";
+    }
+
+    function withdraw() {
+        alert("Your Current Balance: " + earnedPoints + "\nMinimum Withdraw: 10.00 Points");
+    }
+
+    function openTelegram() {
+        window.open("https://t.me/Alexvector360", "_blank");
+    }
+</script>
+
 </body>
 </html>
